@@ -3,9 +3,24 @@ package main
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/md5"
 	"crypto/rand"
+	"encoding/hex"
 	"io"
 )
+
+func generateID() string {
+	buff := make([]byte, 32)
+
+	io.ReadFull(rand.Reader, buff)
+
+	return hex.EncodeToString(buff)
+}
+
+func hashKey(key string) string {
+	hash := md5.Sum([]byte(key))
+	return hex.EncodeToString(hash[:])
+}
 
 func newEncryptionKey() []byte {
 	keyBuf := make([]byte, 32)
